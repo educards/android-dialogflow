@@ -1,2 +1,2 @@
-# Android Dialogflow gRPC Client
-Android Dialogflow gRPC Client
+# Google Dialogflow API Client for Android
+
