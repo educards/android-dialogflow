@@ -1,2 +1,2 @@
-# Android Dialogflow gPRC Client
-Android Dialogflow gPRC Client
+# Android Dialogflow gRPC Client
+Android Dialogflow gRPC Client
