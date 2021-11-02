@@ -65,7 +65,7 @@ public class StreamingIntentDetector implements AutoCloseable {
      * and {@link #dialogflowClientStream} since these fields are accessed and modified
      * from worker threads.
      */
-    private Object monitor = new Object();
+    private final Object monitor = new Object();
 
     private volatile AudioRecordingThread audioRecordingThread;
     private volatile ClientStream<StreamingDetectIntentRequest> dialogflowClientStream;
