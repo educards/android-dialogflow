@@ -153,11 +153,11 @@ public class StreamingIntentDetector implements AutoCloseable {
      */
     class DialogflowStreamingReceiver implements AudioDataReceiver {
 
+        private static final String TAG = "DialogflowStreamingRec";
+
         @Override
         public void onAudioRecordingStarted() {
-            Log.d(TAG, String.format(
-                    "onAudioRecordingStarted() [thread=%s]",
-                    Thread.currentThread().getName()));
+            Log.d(TAG, String.format("onAudioRecordingStarted() [thread=%s]", Thread.currentThread().getName()));
 
             dialogflowSessionsClient.streamingDetectIntentCallable().call(new BidiStreamObserverImpl());
         }
@@ -216,11 +216,11 @@ public class StreamingIntentDetector implements AutoCloseable {
 
     class BidiStreamObserverImpl implements BidiStreamObserver<StreamingDetectIntentRequest, StreamingDetectIntentResponse> {
 
+        private static final String TAG = "BidiStreamObserverImpl";
+
         @Override
         public void onReady(ClientStream<StreamingDetectIntentRequest> stream) {
-            Log.d(TAG, String.format(
-                    "BidiStreamObserver.onReady() [thread=%s]",
-                    Thread.currentThread().getName()));
+            Log.d(TAG, String.format("onReady() [thread=%s]", Thread.currentThread().getName()));
 
             // The first request must **only** contain the audio configuration.
             sendAudioConfig(stream);
@@ -265,17 +265,13 @@ public class StreamingIntentDetector implements AutoCloseable {
 
         @Override
         public void onStart(StreamController controller) {
-            Log.d(TAG, String.format(
-                    "BidiStreamObserver.onStart() [thread=%s]",
-                    Thread.currentThread().getName()));
+            Log.d(TAG, String.format("onStart() [thread=%s]", Thread.currentThread().getName()));
             observer.onStart(StreamingIntentDetector.this, controller);
         }
 
         @Override
         public void onResponse(StreamingDetectIntentResponse response) {
-            Log.d(TAG, String.format(
-                    "BidiStreamObserver.onResponse() [thread=%s]",
-                    Thread.currentThread().getName()));
+            Log.d(TAG, String.format("onResponse() [thread=%s]", Thread.currentThread().getName()));
 
             observer.onResponse(StreamingIntentDetector.this, response);
 
@@ -301,19 +297,13 @@ public class StreamingIntentDetector implements AutoCloseable {
 
         @Override
         public void onError(Throwable t) {
-            Log.e(TAG, String.format(
-                    "BidiStreamObserver.onError() [thread=%s]",
-                    Thread.currentThread().getName()), t);
-
+            Log.e(TAG, String.format("onError() [thread=%s]", Thread.currentThread().getName()), t);
             observer.onError(StreamingIntentDetector.this, t);
         }
 
         @Override
         public void onComplete() {
-            Log.d(TAG, String.format(
-                    "BidiStreamObserver.onComplete() [thread=%s]",
-                    Thread.currentThread().getName()));
-
+            Log.d(TAG, String.format("onComplete() [thread=%s]", Thread.currentThread().getName()));
             observer.onComplete(StreamingIntentDetector.this);
         }
 
