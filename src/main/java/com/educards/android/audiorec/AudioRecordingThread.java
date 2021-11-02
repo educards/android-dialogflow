@@ -9,7 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Audio recording thread with the support to stream data to the subscribed {@link AudioDataReceiver receiver}.
+ * Audio recording thread based on Android's {@link AudioRecord} with the support to stream data to the subscribed {@link AudioDataReceiver
+ * receiver}.
  *
  * @see #startRecording()
  * @see #isRecording()
