@@ -51,14 +51,14 @@ public class StreamingIntentDetector implements AutoCloseable {
      */
     public static final String UNKNOWN_INTENT = "unknown";
 
-    private Context context;
+    private final Context context;
 
     /**
      * Dialogflow supported language code (see <a href="https://cloud.google.com/dialogflow/docs/reference/language">Dialogflow languages</a>).
      */
-    private String lngCode;
+    private final String lngCode;
 
-    private IntentObserver observer;
+    private final IntentObserver observer;
 
     /**
      * Monitor used to synchronize access to {@link #audioRecordingThread}
