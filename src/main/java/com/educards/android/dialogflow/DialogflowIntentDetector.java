@@ -46,19 +46,20 @@ import javax.annotation.Nullable;
 /**
  * <ul>
  *  <li>
- *      Dialogflow intent detector which uses the {@link AudioRecordingThread} to record
- *      audio input and passes the recorded audio data down to streaming gRPC API of Dialogflow to detect
+ *      Intent detector which uses the {@link AudioRecordingThread} to record
+ *      audio input from mic and passes the recorded audio data down to gRPC API of Dialogflow to detect
  *      the intent online.
  *  </li>
+ *  <li>Audio data are streamed at every point of the procedure. No audio data are saved to filesystem during intent detection.</li>
  *  <li>It's valid to call the {@link #startIntentDetection(AudioRecordingThreadInitializer)} multiple times.</li>
  *  <li>{@link #close()} needs to be called to clean up resources such as threads.</li>
  * </ul>
  *
  * @see #startIntentDetection(AudioRecordingThreadInitializer)
  */
-public class StreamingIntentDetector implements AutoCloseable {
+public class DialogflowIntentDetector implements AutoCloseable {
 
-    private static final String TAG = "StreamingIntentDetector";
+    private static final String TAG = "DialogflowIntentDetect";
 
     /**
      * Intent returned if the Dialogflow understood the utterance, but couldn't infer
@@ -74,7 +75,7 @@ public class StreamingIntentDetector implements AutoCloseable {
      */
     private final String lngCode;
 
-    private final IntentObserver observer;
+    private final DialogflowIntentObserver observer;
 
     /**
      * Monitor used to synchronize access to {@link #audioRecordingThread}
@@ -93,7 +94,7 @@ public class StreamingIntentDetector implements AutoCloseable {
      * @param credentialsRawRes JSON server key stored in 'raw' resource folder.
      * @param lngCode Dialogflow supported language code (see <a href="https://cloud.google.com/dialogflow/docs/reference/language">Dialogflow languages</a>).
      */
-    public StreamingIntentDetector(Context context, String sessionUuid, int credentialsRawRes, String lngCode, IntentObserver observer) {
+    public DialogflowIntentDetector(Context context, String sessionUuid, int credentialsRawRes, String lngCode, DialogflowIntentObserver observer) {
         this.context = context;
         this.lngCode = lngCode;
         this.observer = observer;
@@ -282,24 +283,24 @@ public class StreamingIntentDetector implements AutoCloseable {
         @Override
         public void onStart(StreamController controller) {
             Log.d(TAG, String.format("onStart() [thread=%s]", Thread.currentThread().getName()));
-            observer.onStart(StreamingIntentDetector.this, controller);
+            observer.onStart(DialogflowIntentDetector.this, controller);
         }
 
         @Override
         public void onResponse(StreamingDetectIntentResponse response) {
             Log.d(TAG, String.format("onResponse() [thread=%s]", Thread.currentThread().getName()));
 
-            observer.onResponse(StreamingIntentDetector.this, response);
+            observer.onResponse(DialogflowIntentDetector.this, response);
 
             if (!response.getQueryResult().getIntent().getDisplayName().isEmpty())
             {   // Intent detected?
                 requestStopAudioRecording();
-                observer.onResponseIntent(StreamingIntentDetector.this, response);
+                observer.onResponseIntent(DialogflowIntentDetector.this, response);
 
             } else if (response.getRecognitionResult().getMessageType() == StreamingRecognitionResult.MessageType.END_OF_SINGLE_UTTERANCE)
             {   // End of utterance?
                 requestStopAudioRecording();
-                observer.onResponseEndOfUtterance(StreamingIntentDetector.this, response);
+                observer.onResponseEndOfUtterance(DialogflowIntentDetector.this, response);
             }
         }
 
@@ -314,13 +315,13 @@ public class StreamingIntentDetector implements AutoCloseable {
         @Override
         public void onError(Throwable t) {
             Log.e(TAG, String.format("onError() [thread=%s]", Thread.currentThread().getName()), t);
-            observer.onError(StreamingIntentDetector.this, t);
+            observer.onError(DialogflowIntentDetector.this, t);
         }
 
         @Override
         public void onComplete() {
             Log.d(TAG, String.format("onComplete() [thread=%s]", Thread.currentThread().getName()));
-            observer.onComplete(StreamingIntentDetector.this);
+            observer.onComplete(DialogflowIntentDetector.this);
         }
 
     }
