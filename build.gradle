@@ -1,70 +1,17 @@
-
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.android_gradle_plugin_version = '7.0.3'
-
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
-
     dependencies {
-        classpath "com.android.tools.build:gradle:$android_gradle_plugin_version"
+        classpath "com.android.tools.build:gradle:7.0.3"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
-plugins {
-    id 'com.android.library'
-}
-
-android {
-    compileSdk 30
-
-    defaultConfig {
-        minSdk 21
-        targetSdk 30
-        versionCode 1
-        versionName "0.1-alpha"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-        targetSdkVersion 30
-        minSdkVersion 21
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    compileSdkVersion 30
-    buildToolsVersion '30.0.3'
-}
-
-configurations {
-    all {
-
-        /**
-         * This exclusion solves the following Gradle build problem:
-         *   'commons-logging'/'httpclient' defines classes that conflict with classes now provided by Android.
-         *   Solutions include finding newer versions or alternative libraries that don't have the same problem
-         *   (for example, for httpclient use HttpUrlConnection or okhttp instead),
-         *   or repackaging the library using something like jarjar.
-         */
-        exclude module: 'httpclient'
-        exclude module: 'commons-logging'
-
-    }
-}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Dialogflow v2
-    implementation 'com.google.cloud:google-cloud-dialogflow:3.3.0'
-    implementation 'io.grpc:grpc-okhttp:1.39.0'
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
