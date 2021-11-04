@@ -112,7 +112,7 @@ private void startDialogflowIntentDetection() {
 }
 ```
 
-#### Handling intent
+#### Handling 'Voice-to-Intent' callbacks
 
 This is where we handle all states of Dialogflow's 'Voice-to-Intent' procedure.
 Once the intent is detected (or not) the `handleDialogflowIntent(intent)` callback is called.
