@@ -191,3 +191,6 @@ protected void onDestroy() {
 }
 
 ```
+
+## Acknowledgment
+Special thanks to Svitlana Dzyuban who kindly donated us Educards GitHub account and thus allowing us to release this library.
