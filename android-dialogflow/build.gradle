@@ -42,7 +42,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/OWNER/REPOSITORY")
+                url = uri("https://maven.pkg.github.com/$github_owner/$github_repository")
                 credentials {
                     username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                     password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -50,8 +50,7 @@ afterEvaluate {
             }
         }
         publications {
-            release(MavenPublication) {
-                // Applies the component for the release build variant.
+            gpr(MavenPublication) {
                 from components.release
             }
         }
