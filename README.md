@@ -20,14 +20,16 @@ this library is nevertheless **suitable for testing and prototyping**.
 
 # Integration
 
-### Dependencies (build.gradle)
+### Dependencies
+**``build.gradle``**
 ```gradle
 dependencies {
     implementation "com.educards:android-dialogflow:0.0.1"
 }
 ```
 
-### Permissions (AndroidManifest.xml)
+### Permissions
+**``AndroidManifest.xml``**
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -35,7 +37,12 @@ dependencies {
 
 ### Activity/Fragment code
 
-**Initialization**
+#### Initialization
+
+As already mentioned, there are good reasons not to access Dialogfrom directly from Android (security etc.).
+And in this block you can see, that we need to keep Dialogflow credentials directly on the device.
+Keep in mind, that this lib is intended for testing and prototyping.
+
 ```java
 /**
  * Initializes the DialogflowIntentDetector.
@@ -61,7 +68,10 @@ private DialogflowIntentDetector initDialogflowV2() {
 }
 ```
 
-**Starting intent detection**
+#### Starting intent detection
+
+The most important method here is `startIntentDetection()`. Rest of the code is initialization and permissions checking.
+
 ```java
 private DialogflowIntentDetector dialogflowIntentDetector;
 
@@ -72,17 +82,17 @@ private DialogflowIntentDetector dialogflowIntentDetector;
  * @see AudioRecordingThread#requestStop()
  */
 private void startDialogflowIntentDetection() {
-    
-    // Intent detector may be reused multiple times therefore
-    // it's sufficient to initialize it only once.
-    if (dialogflowIntentDetector == null) {
-        dialogflowIntentDetector = initDialogflowV2();
-    }
 
     // Check for audio recording permissions.
     // The ActivityCompat.checkSelfPermission() is just an illustration here.
     // Any other method to request app permission may be used here.
     if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+    
+        // Intent detector may be reused multiple times therefore
+        // it's sufficient to initialize it only once.
+        if (dialogflowIntentDetector == null) {
+            dialogflowIntentDetector = initDialogflowV2();
+        }
         
         // Start recording audio and stream it down to Dialogflow.
         dialogflowIntentDetector.startIntentDetection(
@@ -102,7 +112,11 @@ private void startDialogflowIntentDetection() {
 }
 ```
 
-**Handling intent**
+#### Handling intent
+
+This is where we handle all states of Dialogflow's 'Voice-to-Intent' procedure.
+Once the intent is detected (or not) the `handleDialogflowIntent(intent)` callback is called.
+
 ```java
 class MyIntentObserver implements DialogflowIntentObserver {
 
@@ -166,7 +180,7 @@ class MyIntentObserver implements DialogflowIntentObserver {
 });
 ```
 
-**Cleanup**
+#### Cleanup
 ```java
 @Override
 protected void onDestroy() {
