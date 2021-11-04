@@ -127,6 +127,13 @@ public class DialogflowIntentDetector implements AutoCloseable {
     }
 
     /**
+     * @see #startIntentDetection(AudioRecordingThreadInitializer)
+     */
+    public void startIntentDetection() {
+        startIntentDetection(null);
+    }
+
+    /**
      * Runs the {@link AudioRecordingThread} and passes audio bytes down to streaming gRPC API
      * of Dialogflow to detect the desired intent.
      */
