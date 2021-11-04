@@ -12,6 +12,12 @@ The only officialy supported client libs for Dialogflow v2 API are for mayor pro
 While there is a good reason not to access Dialogflow directly from Android app in production (security, authentication and access controls)
 this library is nevertheless **suitable for testing and prototyping**.
 
+# API
+* **`DialogflowIntentDetector`**: Entry point of intent detection. (`startIntentDetection()`)
+* **`DialogflowIntentObserver`**: Observes the state of intent detection. (`onResponseIntent`, `onComplete`, `onError`)
+* **`AudioRecordingThread`**: Working thread in which records the audio. (`isRecording()`, `requestStop()`, `isStopRequested()`)
+* **`AudioDataReceiver`**: Listener of recorded audio data. May be used for live waveform/audio level rendering or any other audio data processing.
+
 # Integration
 
 ### Dependencies (build.gradle)
@@ -48,9 +54,9 @@ private DialogflowIntentDetector initDialogflowV2() {
         // https://cloud.google.com/dialogflow/es/docs/reference/language
         "en",
 
-        // Observer which handles all the lifecycle callback
-        // of intent detection (onComplete, onResponse, onError, ...).
-        new IntentObserver()
+        // Custom observer which handles intent detection callbacks
+        // (onComplete, onResponse, onError, ...).
+        new MyIntentObserver()
     );
 }
 ```
@@ -98,7 +104,7 @@ private void startDialogflowIntentDetection() {
 
 **Handling intent**
 ```java
-class IntentObserver implements DialogflowIntentObserver {
+class MyIntentObserver implements DialogflowIntentObserver {
 
     private StreamingDetectIntentResponse detectedIntent;
 
