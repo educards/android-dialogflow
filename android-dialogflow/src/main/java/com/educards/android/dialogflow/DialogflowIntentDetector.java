@@ -152,6 +152,18 @@ public class DialogflowIntentDetector implements AutoCloseable {
         }
     }
 
+    /**
+     * @return Display name of the detected intent or {@link #UNKNOWN_INTENT}. Never returns null.
+     */
+    public static final String getIntentString(StreamingDetectIntentResponse detectedIntent) {
+        if (detectedIntent == null) {
+            return UNKNOWN_INTENT;
+        } else {
+            String intentName = detectedIntent.getQueryResult().getIntent().getDisplayName();
+            return intentName == null || intentName.isEmpty() ? UNKNOWN_INTENT : intentName;
+        }
+    }
+
     @Override
     public void close() {
         synchronized (monitor) {
