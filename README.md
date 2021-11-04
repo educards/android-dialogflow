@@ -34,7 +34,7 @@ dependencies {
 /**
  * Initializes the DialogflowIntentDetector.
  */
-private void initDialogflowV2() {
+private DialogflowIntentDetector initDialogflowV2() {
     return new DialogflowIntentDetector(context,
 
         // Session UUID used for logging and error reporting.
