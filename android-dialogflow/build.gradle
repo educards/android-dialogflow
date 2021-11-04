@@ -5,14 +5,17 @@ plugins {
 
 group = "com.educards"
 
+def artifact_version_code = 1
+def artifact_version_name = "0.0.1"
+
 android {
     compileSdk 30
 
     defaultConfig {
         minSdk 21
         targetSdk 30
-        versionCode 1
-        versionName "0.0.1-SNAPSHOT"
+        versionCode artifact_version_code
+        versionName artifact_version_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -50,8 +53,12 @@ afterEvaluate {
             }
         }
         publications {
-            gpr(MavenPublication) {
+            release(MavenPublication) {
                 from components.release
+
+                //groupId = '...'       // already set implicitly
+                //artifactId = '...'    // already set implicitly
+                version = artifact_version_name
             }
         }
     }
