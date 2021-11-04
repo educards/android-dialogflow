@@ -13,9 +13,9 @@ While there is a good reason not to access Dialogflow directly from Android app 
 this library is nevertheless **suitable for testing and prototyping**.
 
 # API
-* **`DialogflowIntentDetector`**: Entry point of intent detection. (`startIntentDetection()`)
-* **`DialogflowIntentObserver`**: Observes the state of intent detection. (`onResponseIntent`, `onComplete`, `onError`)
-* **`AudioRecordingThread`**: Working thread in which records the audio. (`isRecording()`, `requestStop()`, `isStopRequested()`)
+* **`DialogflowIntentDetector`**: Entry point of intent detection (`startIntentDetection()`).
+* **`DialogflowIntentObserver`**: Observes the state of intent detection (`onResponseIntent`, `onComplete`, `onError`).
+* **`AudioRecordingThread`**: Working thread which records the audio by utilizing Android's [AudioRecord](https://developer.android.com/reference/android/media/AudioRecord) (`isRecording()`, `requestStop()`, `isStopRequested()`).
 * **`AudioDataReceiver`**: Listener of recorded audio data. May be used for live waveform/audio level rendering or any other audio data processing.
 
 # Integration
