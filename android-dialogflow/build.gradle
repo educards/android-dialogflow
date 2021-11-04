@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 group = "com.educards"
@@ -11,7 +12,7 @@ android {
         minSdk 21
         targetSdk 30
         versionCode 1
-        versionName "0.1-alpha"
+        versionName "0.0.1-SNAPSHOT"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -31,6 +32,30 @@ android {
     }
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
+}
+
+// Because the components are created only during the afterEvaluate phase, we must
+// configure publications using the afterEvaluate() lifecycle method.
+// src: https://developer.android.com/studio/build/maven-publish-plugin#groovy
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/OWNER/REPOSITORY")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                }
+            }
+        }
+        publications {
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+            }
+        }
+    }
 }
 
 configurations {
