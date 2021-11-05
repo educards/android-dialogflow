@@ -24,7 +24,7 @@ this library is nevertheless **suitable for testing and prototyping**.
 **``build.gradle``**
 ```gradle
 dependencies {
-    implementation "com.educards:android-dialogflow:0.0.1"
+    implementation "com.educards:android-dialogflow:0.1.0"
 }
 ```
 
