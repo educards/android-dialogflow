@@ -5,8 +5,8 @@ plugins {
 
 group = "com.educards"
 
-def artifact_version_code = 1
-def artifact_version_name = "0.0.1"
+def artifact_version_code = 2
+def artifact_version_name = "0.1.0"
 
 android {
     compileSdk 30
