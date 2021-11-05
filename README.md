@@ -1,5 +1,8 @@
 # Android Dialogflow Client Library
 
+[![GitHub release](https://img.shields.io/github/v/release/educards/android-dialogflow?include_prereleases&style=flat-square)](https://github.com/educards/android-dialogflow/releases)
+[![GitHub license](https://img.shields.io/github/license/educards/android-dialogflow?style=flat-square)](https://github.com/educards/android-dialogflow/blob/main/LICENSE)
+
 In 2021 Dialogflow switched its API to v2.
 While for API v1 there was an [official Android library](https://github.com/dialogflow/dialogflow-android-client), for API v2 there isn't.
 The only officialy supported client libs for Dialogflow v2 API are for mayor programming languages (Java, Go, C#, etc.), but not for Android platform.
