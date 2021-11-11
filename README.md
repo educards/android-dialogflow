@@ -1,5 +1,8 @@
 # Android Dialogflow Client Library
 
+[![GitHub release](https://img.shields.io/github/v/release/educards/android-dialogflow?include_prereleases&style=flat-square)](https://github.com/educards/android-dialogflow/releases)
+[![GitHub license](https://img.shields.io/github/license/educards/android-dialogflow?style=flat-square)](https://github.com/educards/android-dialogflow/blob/main/LICENSE)
+
 In 2021 Dialogflow switched its API to v2.
 While for API v1 there was an [official Android library](https://github.com/dialogflow/dialogflow-android-client), for API v2 there isn't.
 The only officialy supported client libs for Dialogflow v2 API are for mayor programming languages (Java, Go, C#, etc.), but not for Android platform.
@@ -24,7 +27,7 @@ this library is nevertheless **suitable for testing and prototyping**.
 **``build.gradle``**
 ```gradle
 dependencies {
-    implementation "com.educards:android-dialogflow:0.0.1"
+    implementation "com.educards:android-dialogflow:0.1.0"
 }
 ```
 
@@ -194,3 +197,20 @@ protected void onDestroy() {
 
 ## Acknowledgment
 Special thanks to Svitlana Dzyuban who kindly donated us Educards GitHub account and thus allowing us to release this library.
+
+## License
+```
+Copyright 2021 Educards, SL
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
