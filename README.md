@@ -200,7 +200,7 @@ Special thanks to Svitlana Dzyuban who kindly donated us Educards GitHub account
 
 ## License
 ```
-Copyright 2021 Educards, SL
+Copyright 2021 Educards Learning, SL
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
