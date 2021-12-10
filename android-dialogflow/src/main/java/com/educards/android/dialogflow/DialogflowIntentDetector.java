@@ -242,8 +242,10 @@ public class DialogflowIntentDetector implements AutoCloseable {
                     Thread.currentThread().getName()));
 
             synchronized (monitor) {
-                dialogflowClientStream.closeSend();
-                dialogflowClientStream = null;
+                if (dialogflowClientStream != null) {
+                    dialogflowClientStream.closeSend();
+                    dialogflowClientStream = null;
+                }
                 audioRecordingThread = null;
             }
         }
