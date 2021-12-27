@@ -142,7 +142,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
         synchronized (monitor) {
 
             if (audioRecordingThread != null && !audioRecordingThread.isStopRequested()) {
-                Log.d(TAG, AudioRecordingThread.class.getSimpleName() + " is already running.");
+                if (BuildConfig.DEBUG) Log.d(TAG, AudioRecordingThread.class.getSimpleName() + " is already running.");
                 return;
             }
 
@@ -193,7 +193,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
         @Override
         public void onAudioRecordingStarted() {
-            Log.d(TAG, String.format("onAudioRecordingStarted() [thread=%s]", Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("onAudioRecordingStarted() [thread=%s]", Thread.currentThread().getName()));
 
             dialogflowSessionsClient.streamingDetectIntentCallable().call(new BidiStreamObserverImpl());
         }
@@ -208,14 +208,16 @@ public class DialogflowIntentDetector implements AutoCloseable {
             synchronized (monitor) {
 
                 if (audioRecordingThread.isStopRequested()) {
-                    Log.d(TAG, String.format(
-                            "Received audio data ignored [audioRecordingThread.isStopRequested() = %s]",
-                            audioRecordingThread.isStopRequested()));
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, String.format(
+                                "Received audio data ignored [audioRecordingThread.isStopRequested() = %s]",
+                                audioRecordingThread.isStopRequested()));
+                    }
                     return;
                 }
 
                 if (dialogflowClientStream == null) {
-                    Log.d(TAG, "Waiting for clientStream initialization");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "Waiting for clientStream initialization");
                     try {
                         monitor.wait();
                     } catch (InterruptedException e) {
@@ -237,9 +239,11 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
         @Override
         public void onAudioRecordingStopped() {
-            Log.d(TAG, String.format(
-                    "onAudioRecordingStopped() [thread=%s]",
-                    Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, String.format(
+                        "onAudioRecordingStopped() [thread=%s]",
+                        Thread.currentThread().getName()));
+            }
 
             synchronized (monitor) {
                 if (dialogflowClientStream != null) {
@@ -258,7 +262,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
         @Override
         public void onReady(ClientStream<StreamingDetectIntentRequest> stream) {
-            Log.d(TAG, String.format("onReady() [thread=%s]", Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("onReady() [thread=%s]", Thread.currentThread().getName()));
 
             // The first request must **only** contain the audio configuration.
             sendAudioConfig(stream);
@@ -303,13 +307,13 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
         @Override
         public void onStart(StreamController controller) {
-            Log.d(TAG, String.format("onStart() [thread=%s]", Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("onStart() [thread=%s]", Thread.currentThread().getName()));
             observer.onStart(DialogflowIntentDetector.this, controller);
         }
 
         @Override
         public void onResponse(StreamingDetectIntentResponse response) {
-            Log.d(TAG, String.format("onResponse() [thread=%s]", Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("onResponse() [thread=%s]", Thread.currentThread().getName()));
 
             observer.onResponse(DialogflowIntentDetector.this, response);
 
@@ -341,7 +345,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
         @Override
         public void onComplete() {
-            Log.d(TAG, String.format("onComplete() [thread=%s]", Thread.currentThread().getName()));
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("onComplete() [thread=%s]", Thread.currentThread().getName()));
             observer.onComplete(DialogflowIntentDetector.this);
         }
 

@@ -21,6 +21,8 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import com.educards.android.dialogflow.BuildConfig;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,7 +88,7 @@ public class AudioRecordingThread {
     }
 
     public void requestStop() {
-        Log.d(TAG, "Audio recording stop requested");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Audio recording stop requested");
 
         if (thread == null)
             return;
@@ -105,7 +107,7 @@ public class AudioRecordingThread {
 
     private void record() {
 
-        Log.d(TAG, "Initializing AudioRecorder");
+        if (BuildConfig.DEBUG) Log.d(TAG, "Initializing AudioRecorder");
 
         byte[] audioBuffer = new byte[AudioRecordingConstants.BUFFER_SIZE];
         AudioRecord audioRecord = initAudioRecord(audioBuffer.length);
