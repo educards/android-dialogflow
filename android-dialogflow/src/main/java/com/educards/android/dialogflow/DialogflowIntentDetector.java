@@ -122,7 +122,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
             dialogflowSessionName = SessionName.of(projectId, sessionUuid);
 
         } catch (Throwable t) {
-            throw new RuntimeException("Failed to initialize Dialogflow client.");
+            throw new RuntimeException("Failed to initialize Dialogflow client.", t);
         }
     }
 
