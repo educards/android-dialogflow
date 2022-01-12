@@ -195,6 +195,18 @@ protected void onDestroy() {
 
 ```
 
+## Known issues
+
+#### Error: 16 UNAUTHENTICATED
+```
+Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials.
+Expected OAuth 2 access token, login cookie or other valid auth credential
+```
+
+As of January 2022 this error occurs if time on client device is ahead of server time. Try adjusting time on your client device.
+
+Related discussion: https://stackoverflow.com/a/67105230/915756
+
 ## Acknowledgment
 Special thanks to Svitlana Dzyuban who kindly donated us Educards GitHub account and thus allowing us to release this library.
 
