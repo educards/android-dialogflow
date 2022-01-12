@@ -204,7 +204,7 @@ Expected OAuth 2 access token, login cookie or other valid auth credential
 ```
 * As of January 2022 this error occurs if time on client device is ahead of server time. Try adjusting time on your client device.
 * Related discussion: https://stackoverflow.com/a/67105230/915756
-* Thanks [Shardul][https://github.com/shardul] for reporting this issue.
+* Thanks [Shardul](https://github.com/shardul) for reporting this issue.
 
 ## Acknowledgment
 Special thanks to Svitlana Dzyuban who kindly donated us Educards GitHub account and thus allowing us to release this library.
