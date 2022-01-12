@@ -203,6 +203,7 @@ Error: 16 UNAUTHENTICATED: Request had invalid authentication credentials.
 Expected OAuth 2 access token, login cookie or other valid auth credential
 ```
 * As of January 2022 this error occurs if time on client device is ahead of server time. Try adjusting time on your client device.
+* The reason of this might be that the underlying [Java client lib](https://cloud.google.com/dialogflow/es/docs/reference/libraries/java) is not intrinsically designed to be used from the client, but rather on the server side (however, this is just our theory).
 * Related discussion: https://stackoverflow.com/a/67105230/915756
 * Thanks [Shardul](https://github.com/shardul) for reporting this issue.
 
