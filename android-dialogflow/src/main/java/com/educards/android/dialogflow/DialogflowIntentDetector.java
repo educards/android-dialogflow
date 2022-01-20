@@ -91,15 +91,20 @@ public class DialogflowIntentDetector implements AutoCloseable {
     private SessionName dialogflowSessionName;
 
     /**
-     * @param credentialsRawRes JSON server key stored in 'raw' resource folder.
-     * @param lngCode Dialogflow supported language code (see <a href="https://cloud.google.com/dialogflow/docs/reference/language">Dialogflow languages</a>).
+     * @param perAgentCredentialsRawRes JSON formatted GPC project key stored in raw resource folder.
+     *                                  Google requires a dedicated GCP project for each Dialogflow agent.
+     *                                  There is no way to manage multiple Dialogflow agents under a single GCP project.
+     *                                  Therefore for each Dialogflow agent you would like to query you need to initialize
+     *                                  dedicated {@link DialogflowIntentDetector} with a corresponding GCP project key.
+     * @param lngCode Language supported by your Dialogflow agent
+     *                (see <a href="https://cloud.google.com/dialogflow/docs/reference/language">Dialogflow languages</a>).
      */
-    public DialogflowIntentDetector(Context context, String sessionUuid, int credentialsRawRes, String lngCode, DialogflowIntentObserver observer) {
+    public DialogflowIntentDetector(Context context, String sessionUuid, int perAgentCredentialsRawRes, String lngCode, DialogflowIntentObserver observer) {
         this.context = context;
         this.lngCode = lngCode;
         this.observer = observer;
 
-        initDialogflowV2(credentialsRawRes, sessionUuid);
+        initDialogflowV2(perAgentCredentialsRawRes, sessionUuid);
     }
 
     /**
@@ -160,6 +165,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
     }
 
     /**
+     * Helper method to convert detected intent object to String.
      * @return Display name of the detected intent or {@link #UNKNOWN_INTENT}. Never returns null.
      */
     public static final String getIntentString(StreamingDetectIntentResponse detectedIntent) {
