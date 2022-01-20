@@ -42,7 +42,7 @@ dependencies {
 
 #### Initialization
 
-As already mentioned, there are good reasons not to access Dialogfrom directly from Android (security etc.).
+As already mentioned, there are good reasons not to access Dialogflow directly from Android (security etc.).
 And in this block you can see, that we need to keep Dialogflow credentials directly on the device.
 Keep in mind, that this lib is intended for testing and prototyping.
 
