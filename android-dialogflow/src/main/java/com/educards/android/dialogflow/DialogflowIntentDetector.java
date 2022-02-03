@@ -177,12 +177,40 @@ public class DialogflowIntentDetector implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() {
+    /**
+     * Requests the stop of intent detection.
+     * This won't close the intent detector, just stop intent detection, therefore
+     * calling {@link #startIntentDetection()} again is allowed.
+     *
+     * @see #close()
+     */
+    public void requestStop() {
         synchronized (monitor) {
             if (audioRecordingThread != null) {
                 audioRecordingThread.requestStop();
             }
+        }
+    }
+
+    public boolean isRunning() {
+        synchronized (monitor) {
+            if (audioRecordingThread != null) {
+                return audioRecordingThread.isRecording();
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Stops intent detection and releases all resources.
+     */
+    @Override
+    public void close() {
+
+        requestStop();
+
+        synchronized (monitor) {
             if (dialogflowSessionsClient != null) {
                 dialogflowSessionsClient.close();
             }
