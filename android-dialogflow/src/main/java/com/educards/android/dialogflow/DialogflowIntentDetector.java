@@ -61,13 +61,6 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
     private static final String TAG = "DialogflowIntentDetect";
 
-    /**
-     * Intent returned if the Dialogflow understood the utterance, but couldn't infer
-     * any intent. This most commonly happens if there simply doesn't exist any intent definition
-     * for the uttered command.
-     */
-    public static final String UNKNOWN_INTENT = "unknown";
-
     private final Context context;
 
     /**
@@ -161,19 +154,6 @@ public class DialogflowIntentDetector implements AutoCloseable {
             }
 
             audioRecordingThread.startRecording();
-        }
-    }
-
-    /**
-     * Helper method to convert detected intent object to String.
-     * @return Display name of the detected intent or {@link #UNKNOWN_INTENT}. Never returns null.
-     */
-    public static final String getIntentString(StreamingDetectIntentResponse detectedIntent) {
-        if (detectedIntent == null) {
-            return UNKNOWN_INTENT;
-        } else {
-            String intentName = detectedIntent.getQueryResult().getIntent().getDisplayName();
-            return intentName == null || intentName.isEmpty() ? UNKNOWN_INTENT : intentName;
         }
     }
 
