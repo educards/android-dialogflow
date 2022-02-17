@@ -17,16 +17,28 @@
 package com.educards.android.dialogflow;
 
 import com.google.cloud.dialogflow.v2.StreamingDetectIntentResponse;
+import com.google.protobuf.Value;
+
+import java.util.Map;
 
 /**
- * Optional wrapper of the Dialogflow response.
+ * Optional wrapper of the {@link StreamingDetectIntentResponse} which provides
+ * methods to access and handle response data in a more convenient way.
  *
  * <ul>
- *     <li>For convenience, the detected intent name is parsed and stored in {@link #getIntentName()}.</li>
- *     <li>For any other data query {@link #getOrigResponse()}.</li>
+ *     <li>To wrap the {@link StreamingDetectIntentResponse response} use {@link #wrap(StreamingDetectIntentResponse)}.</li>
+ *     <li>Name of the detected intent is parsed and stored in {@link #getIntentName()}.</li>
+ *     <li>Original response is available by {@link #getOrigResponse()}.</li>
+ *     <li>Named parameter values can be acquired by helper methods:</li>
+ *     <ul>
+ *         <li>{@link #getParameterField(String)}</li>
+ *         <li>{@link #getParameterFieldString(String)}</li>
+ *         <li>{@link #getParameterFieldDouble(String)}</li>
+ *         <li>etc.</li>
+ *     </ul>
  * </ul>
  *
- * @see #parse(StreamingDetectIntentResponse)
+ * @see #wrap(StreamingDetectIntentResponse)
  */
 public class DialogflowIntentResponse {
 
@@ -38,9 +50,9 @@ public class DialogflowIntentResponse {
     private static final String UNKNOWN_INTENT = "unknown";
 
     /**
-     * Helper method to convert detected intent object to {@link DialogflowIntentResponse}.
+     * Wraps detected intent object to {@link DialogflowIntentResponse}.
      */
-    public static DialogflowIntentResponse parse(StreamingDetectIntentResponse detectedIntent) {
+    public static DialogflowIntentResponse wrap(StreamingDetectIntentResponse detectedIntent) {
         if (detectedIntent == null) {
             return new DialogflowIntentResponse(UNKNOWN_INTENT, null);
         } else {
@@ -55,7 +67,7 @@ public class DialogflowIntentResponse {
 
     private StreamingDetectIntentResponse origResponse;
 
-    public DialogflowIntentResponse(String intentName, StreamingDetectIntentResponse origResponse) {
+    private DialogflowIntentResponse(String intentName, StreamingDetectIntentResponse origResponse) {
         this.intentName = intentName;
         this.origResponse = origResponse;
     }
@@ -73,6 +85,45 @@ public class DialogflowIntentResponse {
      */
     public StreamingDetectIntentResponse getOrigResponse() {
         return origResponse;
+    }
+
+    /**
+     * @return Value of a <code>String</code> parameter field or <code>null</code>.
+     */
+    public String getParameterFieldString(String fieldName) {
+        Value value = getParameterField(fieldName);
+        return value == null ? null : value.getStringValue();
+    }
+
+    /**
+     * @return Value of a <code>Double</code> parameter field or <code>null</code>.
+     */
+    public Double getParameterFieldDouble(String fieldName) {
+        Value value = getParameterField(fieldName);
+        return value == null ? null : value.getNumberValue();
+    }
+
+    /**
+     * @return Value of a <code>Boolean</code> parameter field or <code>null</code>.
+     */
+    public Boolean getParameterFieldBool(String fieldName) {
+        Value value = getParameterField(fieldName);
+        return value == null ? null : value.getBoolValue();
+    }
+
+    /**
+     * @return Dynamically typed value of a parameter wrapped by this response.
+     */
+    public Value getParameterField(String fieldName) {
+        Map<String, Value> fieldsMap = origResponse.getQueryResult().getParameters().getFieldsMap();
+        return fieldsMap.get(fieldName);
+    }
+
+    @Override
+    public String toString() {
+        return "DialogflowIntentResponse{" +
+                "intentName='" + intentName + '\'' +
+                '}';
     }
 
 }
