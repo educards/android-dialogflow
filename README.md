@@ -169,7 +169,7 @@ class MyIntentObserver implements DialogflowIntentObserver {
      */
     private void handleDialogflowIntent(StreamingDetectIntentResponse detectedIntent) {
     
-        DialogflowIntentResponse response = DialogflowIntentResponse.parse(detectedIntent);
+        DialogflowIntentResponse response = DialogflowIntentResponse.wrap(detectedIntent);
 
         if (DialogflowIntentDetector.UNKNOWN_INTENT.equals(response.getIntentName())) {
             // TODO handle unknown intent
