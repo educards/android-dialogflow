@@ -76,6 +76,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
      * from worker threads.
      */
     private final Object monitor = new Object();
+    private volatile boolean stopRequested;
 
     private volatile AudioRecordingThread audioRecordingThread;
     private volatile ClientStream<StreamingDetectIntentRequest> dialogflowClientStream;
@@ -153,6 +154,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
                 audioRecordingThreadInitializer.onAudioRecordingThreadInit(audioRecordingThread);
             }
 
+            stopRequested = false;
             audioRecordingThread.startRecording();
         }
     }
@@ -168,7 +170,27 @@ public class DialogflowIntentDetector implements AutoCloseable {
         synchronized (monitor) {
             if (audioRecordingThread != null) {
                 audioRecordingThread.requestStop();
+                stopRequested = true;
             }
+        }
+    }
+
+    /**
+     * @return
+     * <ul>
+     *     <li><code>true</code> if intent detection has been stopped due to
+     *         an explicit request to stop it ({@link #requestStop()}).</li>
+     *     <li><code>false</code> if:
+     *     <ul>
+     *         <li>intent detection has not yet been started</li>
+     *         <li>intent detection has been started (again) and is in progress</li>
+     *         <li>intent detection was stopped implicitly by the intent detection engine (an intent has been detected)</li>
+     *     </ul>
+     * </ul>
+     */
+    public boolean isStopRequested() {
+        synchronized (monitor) {
+            return stopRequested;
         }
     }
 
