@@ -224,6 +224,12 @@ public class DialogflowIntentDetector implements AutoCloseable {
         }
     }
 
+    public boolean isActive() {
+        synchronized (monitor) {
+            return isRunning() && !isStopRequested();
+        }
+    }
+
     /**
      * Stops intent detection and releases all resources.
      */
@@ -386,6 +392,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
         }
 
         private void requestStopAudioRecording() {
+            if (BuildConfig.DEBUG) Log.d(TAG, String.format("requestStopAudioRecording() [thread=%s]", Thread.currentThread().getName()));
             synchronized (monitor) {
                 if (audioRecordingThread != null) {
                     audioRecordingThread.requestStop();
@@ -396,6 +403,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
         @Override
         public void onError(Throwable t) {
             Log.e(TAG, String.format("onError() [thread=%s]", Thread.currentThread().getName()), t);
+            requestStopAudioRecording();
             observer.onError(DialogflowIntentDetector.this, t);
         }
 
