@@ -167,10 +167,30 @@ public class DialogflowIntentDetector implements AutoCloseable {
      * @see #close()
      */
     public void requestStop() {
+        requestStop(null);
+    }
+
+    /**
+     * Same as {@link #requestStop()}, but enables the client to
+     * be notified on stop event (<code>stoppedCallback</code>).
+     * <code>stoppedCallback</code> is invoked immediately
+     * is the detector is already stopped.
+     */
+    public void requestStop(@Nullable Runnable stoppedCallback) {
         synchronized (monitor) {
-            if (audioRecordingThread != null) {
-                audioRecordingThread.requestStop();
+
+            if (audioRecordingThread != null && !isStopRequested()) {
+                // running and no stop has yet been request
+                audioRecordingThread.requestStop(stoppedCallback);
                 stopRequested = true;
+
+            } else if (audioRecordingThread == null) {
+                // already stopped
+                // notify the observer immediately
+                if (stoppedCallback != null) stoppedCallback.run();
+
+            } else {
+                // previously requested stop is in progress
             }
         }
     }
