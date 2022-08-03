@@ -26,13 +26,15 @@ import com.educards.android.dialogflow.BuildConfig;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 /**
  * Audio recording thread based on Android's {@link AudioRecord} with the support to stream data to the subscribed {@link AudioDataReceiver
  * receiver}.
  *
  * @see #startRecording()
  * @see #isRecording()
- * @see #requestStop()
+ * @see #requestStop(Runnable)
  * @see #isStopRequested()
  */
 public class AudioRecordingThread {
@@ -42,6 +44,7 @@ public class AudioRecordingThread {
     private List<AudioDataReceiver> receivers;
 
     private volatile boolean stopRequested;
+    private volatile Runnable stoppedCallback;
 
     private Thread thread;
 
@@ -67,7 +70,7 @@ public class AudioRecordingThread {
      * <ul>
      *     <li>Starts new audio recording thread.</li>
      *     <li>Continuously publishes audio data to the subscribed receiver until
-     *     {@link #requestStop() recording stop} is requested.</li>
+     *     {@link #requestStop(Runnable) recording stop} is requested.</li>
      * </ul>
      */
     public void startRecording() {
@@ -88,12 +91,17 @@ public class AudioRecordingThread {
     }
 
     public void requestStop() {
+        requestStop(null);
+    }
+
+    public void requestStop(@Nullable Runnable stoppedCallback) {
         if (BuildConfig.DEBUG) Log.d(TAG, "Audio recording stop requested");
 
         if (thread == null)
             return;
 
-        stopRequested = true;
+        this.stoppedCallback = stoppedCallback;
+        this.stopRequested = true;
         thread = null;
     }
 
@@ -142,11 +150,21 @@ public class AudioRecordingThread {
         }
 
         // Stop
+
         audioRecord.stop();
         Log.v(TAG, String.format("Recording stopped [bytesRead=%d]", bytesRead));
+
+        // This is a single purpose callback therefore
+        // we are releasing it immediately after the stop event is dispatched.
+        if (stoppedCallback != null) {
+            stoppedCallback.run();
+            stoppedCallback = null; // release
+        }
+
         if (receivers != null) {
             for (AudioDataReceiver receiver : receivers) receiver.onAudioRecordingStopped();
         }
+
         audioRecord.release();
     }
 
