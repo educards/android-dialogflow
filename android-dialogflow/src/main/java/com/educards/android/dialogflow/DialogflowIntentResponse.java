@@ -22,7 +22,7 @@ import com.google.protobuf.Value;
 import java.util.Map;
 
 /**
- * Optional wrapper of the {@link StreamingDetectIntentResponse} which provides
+ * Wrapper of the {@link StreamingDetectIntentResponse} which provides
  * methods to access and handle response data in a more convenient way.
  *
  * <ul>
