@@ -295,6 +295,7 @@ public class DialogflowIntentDetector implements AutoCloseable {
 
                 } catch (Throwable t) {
                     Log.e(TAG, "Streaming intent detection failed", t);
+                    // TODO How to behave in this case? Logging is certainly not enough.
                 }
             }
         }
