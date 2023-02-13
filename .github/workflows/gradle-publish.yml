@@ -29,12 +29,18 @@ jobs:
     - name: Build with Gradle
       run: gradle build --stacktrace
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
+    # The GITHUB_USERNAME and GITHUB_TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages and OSSRH
-      run: gradle publish
+    - name: Publish to GitHub Packages
+      run: gradle publishAllPublicationsToGitHubPackagesRepository
       env:
         GITHUB_USERNAME: ${{ github.actor }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # The MAVEN_USERNAME and MAVEN_PASSWORD need to correspond to the credentials environment variables used in
+      # the publishing section of your build.gradle
+    - name: Publish to OSSRH (Sonatype Maven)
+      run: gradle publishAllPublicationsToOSSRHRepository
+      env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
